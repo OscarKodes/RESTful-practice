@@ -1,23 +1,19 @@
 <%- include partials/header %>
 
-<h1>THIS IS SHOW</h1>
+<div class="container mt-5">
+  <h1><%= hero.name %></h1>
 
-
-  <p>
-    <strong><%= hero.name %></strong>
-  </p>
-
-  <p><%= hero.date %></p>
+  <p><%= hero.date.toDateString() %></p>
 
   <img src="<%= hero.image %>" alt="">
 
-  <p> <%= hero.info %></p>
-
-  <p> Likes: <%= hero.likes %></p>
+  <p class="caption"> <%= hero.info %></p>
 
   <a class="btn btn-success" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
 
   <a class="btn btn-primary" href="/heroes">Back</a>
+</div>
+
 
 
 

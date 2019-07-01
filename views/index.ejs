@@ -1,24 +1,33 @@
 <%- include partials/header %>
 
-<h1>THIS IS INDEX</h1>
+<div class="container my-5 text-center">
+  <h1 class="display-2 font-weight-bold my-5">Welcome!</h1>
 
-<a class="btn btn-lg btn-primary" href="/heroes/new">Submit a Hero</a>
+  <a class="btn btn-lg btn-outline-primary" href="/heroes/new">Submit a Hero</a>
+</div>
 
-<h1>HEROES: </h1>
+<div class="main container">
 
-<% heroes.forEach(function(hero){ %>
-  <p>
-    <strong><%= hero.name %></strong>
+  <ul class="list-group text-left">
 
-  </p>
-  <p><%= hero.date %></p>
-  <img src="<%= hero.image %>" alt="">
+    <% heroes.forEach(function(hero){ %>
+    <li class="list-group-item">
+      <p class="display-4">
+        <%= hero.name %>
+      </p>
+      <p><%= hero.date.toDateString() %></p>
+      <img class="img-thumbnail float-right" src="<%= hero.image %>" alt="">
 
-  <p> <%= hero.info %></p>
-  <p> Likes: <%= hero.likes %></p>
+      <p> <%= hero.info %></p>
 
-  <a class="btn btn-info" href="/heroes/<%= hero._id %>">See More</a>
-<% }); %>
+      <a class="btn btn-info" href="/heroes/<%= hero._id %>">See More</a>
+    </li>
+    <% }); %>
+
+  </ul>
+
+</div>
+
 
 
 <%- include partials/footer %>

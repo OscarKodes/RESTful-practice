@@ -1,13 +1,22 @@
 <%- include partials/header %>
 
-<h1>THIS IS NEW</h1>
+<h1 class="display-3 my-5">Submit a New Hero</h1>
 
-<form class="" action="/heroes" method="post">
-  <input type="text" name="hero[name]" value="" placeholder="Name">
-  <input type="text" name="hero[image]" value="" placeholder="Image URL">
-  <input type="text" name="hero[info]" value="" placeholder="Description">
-  <input type="submit" name="" value="Submit">
-</form>
+<div class="container my-5">
+  <form class="" action="/heroes" method="post">
+    <div class="form-group my-5">
+        <input class="form-control form-control-lg" type="text" name="hero[name]" value="" placeholder="Name" required>
+    </div>
+    <div class="form-group my-5">
+      <input class="form-control form-control-lg" type="text" name="hero[image]" value="" placeholder="Image URL" required>
+    </div>
+    <div class="form-group my-5">
+      <input class="form-control form-control-lg" type="text" name="hero[info]" value="" placeholder="Description" required>
+    </div>
+    <input class="btn btn-primary btn-lg" type="submit" name="" value="Submit">
+  </form>
+</div>
+
 
 
 <%- include partials/footer %>

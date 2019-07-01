@@ -27,24 +27,9 @@ const heroSchema = new mongoose.Schema ({
   date: { type: Date, default: Date.now},
   image: String,
   info: String,
-  likes: Number
 });
 
 const Hero = mongoose.model("Hero", heroSchema);
-
-// Hero.create({
-//   name: "Froppy",
-//   image: "http://pm1.narvii.com/6150/30a4597011c404a2f4c1aad2983ad096a9135f34_00.jpg",
-//   info: "Has a powerful tongue like a frog and has many other abilities of frogs.",
-//   likes: 0
-// }, function(err, newHero) {
-//   if (err) {
-//     console.log("There was an error:", err);
-//   } else {
-//     console.log("New hero created:");
-//     console.log(newHero);
-//   }
-// });
 
 
 // ROUTES =========================================
