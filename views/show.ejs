@@ -1,0 +1,25 @@
+<%- include partials/header %>
+
+<h1>THIS IS SHOW</h1>
+
+
+  <p>
+    <strong><%= hero.name %></strong>
+  </p>
+
+  <p><%= hero.date %></p>
+
+  <img src="<%= hero.image %>" alt="">
+
+  <p> <%= hero.info %></p>
+
+  <p> Likes: <%= hero.likes %></p>
+
+  <a class="btn btn-success" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
+
+  <a class="btn btn-primary" href="/heroes">Back</a>
+
+
+
+
+<%- include partials/footer %>

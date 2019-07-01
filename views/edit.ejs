@@ -1,0 +1,17 @@
+<%- include partials/header %>
+
+<h1>THIS IS EDIT</h1>
+
+<form class="" action="/heroes/<%= hero._id %>?_method=PUT" method="post">
+  <input type="text" name="hero[name]" value="<%= hero.name %>" placeholder="Name">
+  <input type="text" name="hero[image]" value="<%= hero.image %>" placeholder="Image URL">
+  <input type="text" name="hero[info]" value="<%= hero.info %>" placeholder="Description">
+  <input type="submit" name="" value="Submit">
+</form>
+
+<form class="" action="/heroes/<%= hero._id %>?_method=DELETE" method="post">
+  <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+
+<%- include partials/footer %>

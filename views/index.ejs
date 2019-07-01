@@ -1,0 +1,24 @@
+<%- include partials/header %>
+
+<h1>THIS IS INDEX</h1>
+
+<a class="btn btn-lg btn-primary" href="/heroes/new">Submit a Hero</a>
+
+<h1>HEROES: </h1>
+
+<% heroes.forEach(function(hero){ %>
+  <p>
+    <strong><%= hero.name %></strong>
+
+  </p>
+  <p><%= hero.date %></p>
+  <img src="<%= hero.image %>" alt="">
+
+  <p> <%= hero.info %></p>
+  <p> Likes: <%= hero.likes %></p>
+
+  <a class="btn btn-info" href="/heroes/<%= hero._id %>">See More</a>
+<% }); %>
+
+
+<%- include partials/footer %>
