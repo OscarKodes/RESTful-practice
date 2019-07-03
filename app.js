@@ -6,7 +6,9 @@ bodyParser      = require("body-parser"),
 mongoose        = require("mongoose"),
 ejs             = require("ejs"),
 app             = express(),
-Hero = require("./models/hero");
+Hero            = require("./models/hero"),
+seedDB          = require("./seeds");
+
 
 
 // Tells express to use ejs files in the views folder
@@ -25,10 +27,12 @@ app.use(methodOverride("_method"));
 mongoose.connect("mongodb://localhost:27017/rest-practice", {useNewUrlParser: true, useFindAndModify: false});
 
 
-
+// UNCOMMENT THE SEEDDB LINE BELOW !!
+// TO REMOVE ALL HERO OBJECTS !!
+// AND RESET SAMPLE FILES !!
+// seedDB();
 
 // ROUTES =========================================
-
 app.get("/", function(req, res){
   res.redirect("/heroes");
 });
