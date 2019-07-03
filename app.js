@@ -5,7 +5,8 @@ methodOverride  = require("method-override"),
 bodyParser      = require("body-parser"),
 mongoose        = require("mongoose"),
 ejs             = require("ejs"),
-app             = express()
+app             = express(),
+Hero = require("./models/hero");
 
 // Tells express to use ejs files in the views folder
 app.set('view engine', 'ejs');
@@ -22,14 +23,7 @@ app.use(methodOverride("_method"));
 // Mongoose =========================================
 mongoose.connect("mongodb://localhost:27017/rest-practice", {useNewUrlParser: true, useFindAndModify: false});
 
-const heroSchema = new mongoose.Schema ({
-  name: String,
-  date: { type: Date, default: Date.now},
-  image: String,
-  info: String,
-});
 
-const Hero = mongoose.model("Hero", heroSchema);
 
 
 // ROUTES =========================================
