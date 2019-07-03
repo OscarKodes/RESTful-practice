@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const Review = require("./models/review");
 const Hero = require("./models/hero");
+const Berry = require("./models/berry");
 
-var sampleData = [{
+const sampleData = [{
     name: "Uravity",
     image: "https://i.pinimg.com/originals/38/2d/aa/382daac96701ee6fe7094f14769c5582.jpg",
     info: "She can make anything float with just the touch of her fingertips!"
@@ -24,6 +25,28 @@ var sampleData = [{
   },
 ]
 
+const berrySamples = [{
+    name: "Cheri Berry",
+    image: "https://cdn.bulbagarden.net/upload/6/61/Bag_Cheri_Berry_Sprite.png"
+  },
+  {
+    name: "Chesto Berry",
+    image: "https://cdn.bulbagarden.net/upload/3/3f/Bag_Chesto_Berry_Sprite.png",
+  },
+  {
+    name: "Pecha Berry",
+    image: "https://cdn.bulbagarden.net/upload/8/8f/Bag_Pecha_Berry_Sprite.png",
+  },
+  {
+    name: "Oran Berry",
+    image: "https://cdn.bulbagarden.net/upload/8/86/Bag_Oran_Berry_Sprite.png",
+  },
+  {
+    name: "Nanab Berry",
+    image: "https://cdn.bulbagarden.net/upload/5/53/Bag_Nanab_Berry_Sprite.png",
+  }
+]
+
 function seedDB() {
   // Remove all
   Hero.deleteMany({}, function(err) {
@@ -33,13 +56,14 @@ function seedDB() {
       console.log("Removed heroes.");
 
       // add a sample heroes
-      sampleData.forEach(function(hero) {
+      sampleData.forEach(function(hero, i) {
         Hero.create(hero, function(err, newHero) {
           if (err) {
             console.log(err);
           } else {
             console.log("Added hero:", newHero.name);
 
+            // This is for embedding
             newHero.reviews.push({
               author: "All Might!",
               comment: "PLUS ULTRA!"
@@ -48,11 +72,14 @@ function seedDB() {
               author: "Eraser Head",
               comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Penatibus et magnis dis parturient montes nascetur ridiculus."
             });
-            newHero.save(function(err){
-              if (err){
+            newHero.save(function(err) {
+              if (err) {
                 console.log(err);
               } else {
                 console.log("Sample comments added.");
+                if (i === 3) {
+                  berrySetUp();
+                };
               }
             });
           }
@@ -60,6 +87,58 @@ function seedDB() {
       });
     }
   });
+};
+
+function berrySetUp() {
+
+  // Creates berries
+  Berry.deleteMany({}, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("All berries removed.");
+      berrySamples.forEach(function(berry, i) {
+        Berry.create(berry, function(err, newBerry) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("Added", newBerry.name);
+            if (i === 4) {
+              berryLikes();
+            }
+          }
+        })
+      });
+    }
+  });
 }
+
+function berryLikes() {
+
+  Berry.find({}, function(err, allBerries) {
+
+    if (err) {
+      console.log(err);
+    } else {
+      allBerries.forEach(function(berry, idx) {
+        Hero.find({}, function(err, allHeroes) {
+          if (err) {
+            console.log(err);
+          } else if (idx < 4) {
+            allHeroes[idx].berries.push(berry);
+            allHeroes[idx].save(function(err, hero) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(hero.name + " likes ", hero.berries);
+              }
+            });
+          }
+        });
+      });
+    };
+  });
+}
+
 
 module.exports = seedDB;

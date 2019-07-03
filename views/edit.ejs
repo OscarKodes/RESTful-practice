@@ -13,6 +13,28 @@
     <div class="form-group my-5">
       <input class="form-control form-control-lg" type="text" name="hero[info]" value="<%= hero.info %>" placeholder="Description" required>
     </div>
+
+    <div class="row mb-5">
+      <% berries.forEach(function(berry){ %>
+      <div class="berry-checker col border rounded-circle mx-3 my-3 py-5 px-1">
+        <p>
+          <strong>
+            <%= berry.name %>
+          </strong>
+          <img src="<%= berry.image %>" alt="">
+        </p>
+
+        <input type="checkbox" name="hero[berries]" value="<%= berry._id %>"
+        <% if (hero.berries.includes(berry.id)) {%>
+        checked
+        <% } %>
+        >
+      </div>
+
+      <% }); %>
+
+    </div>
+
     <input class="btn btn-primary btn-lg" type="submit" name="" value="Submit">
 
   </form>

@@ -2,6 +2,23 @@ body {
   text-align: center;
 }
 
+.hero-show-box {
+  width: 80%;
+  min-width: 900px;
+  max-width: 1200px;
+}
+
+.berry.container {
+  width: 30%;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.hero-info {
+  line-height: 2;
+  width: 80%;
+}
+
 .review-display {
   width: 75%;
   min-width: 750px;
@@ -24,4 +41,23 @@ body {
 
 .img-thumbnail {
   max-width: 400px;
+}
+
+.btn-xl {
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  letter-spacing: 4px;
+  border-radius: 20px;
+}
+
+
+input[type=checkbox] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(3); /* IE */
+  -moz-transform: scale(3); /* FF */
+  -webkit-transform: scale(3); /* Safari and Chrome */
+  -o-transform: scale(3); /* Opera */
+  transform: scale(3);
+  padding: 10px;
+  border-color: blue;
 }

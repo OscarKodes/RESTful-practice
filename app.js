@@ -7,6 +7,7 @@ mongoose        = require("mongoose"),
 ejs             = require("ejs"),
 app             = express(),
 Hero            = require("./models/hero"),
+Berry           = require("./models/berry"),
 seedDB          = require("./seeds");
 
 
@@ -46,7 +47,9 @@ app.get("/heroes", function(req, res){
 
 // NEW
 app.get("/heroes/new", function(req, res){
-  res.render("new");
+  Berry.find({}, function(err, allBerries){
+    res.render("new", {berries: allBerries});
+  });
 });
 
 // CREATE
@@ -57,8 +60,7 @@ app.post("/heroes", function(req, res){
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
     } else {
-      console.log(newHero);
-      res.redirect("/heroes/" + newHero.id);
+        res.redirect("/heroes/" + newHero.id);
     }
   });
 });
@@ -88,7 +90,9 @@ app.post("/heroes/:id/review", function(req, res){
 // SHOW
 app.get("/heroes/:id", function(req, res){
 
-  Hero.findById(req.params.id, function(err, foundHero){
+
+
+  Hero.findById(req.params.id).populate("berries").exec(function(err, foundHero){
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
@@ -106,7 +110,9 @@ app.get("/heroes/:id/edit", function(req, res){
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("error");
     } else {
-      res.render("edit", {hero: foundHero});
+      Berry.find({}, function(err, allBerries){
+        res.render("edit", {hero: foundHero, berries: allBerries});
+      });
     }
   });
 });

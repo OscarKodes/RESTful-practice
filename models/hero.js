@@ -6,7 +6,13 @@ const heroSchema = new mongoose.Schema ({
   date: { type: Date, default: Date.now},
   image: String,
   info: String,
-  reviews: [reviewSchema]
+  reviews: [reviewSchema],
+  berries: [
+     {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Berry"
+     }
+  ]
 });
 
 module.exports = mongoose.model("Hero", heroSchema);

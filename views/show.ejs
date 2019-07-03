@@ -1,17 +1,33 @@
 <%- include partials/header %>
 
-<div class="container mt-5">
-  <h1><%= hero.name %></h1>
+<div class="hero-show-box fluid-container my-5 mx-auto border border-success p-4 rounded">
+  <h1 class="display-1 my-5"><%= hero.name %></h1>
 
   <p><%= hero.date.toDateString() %></p>
 
-  <img src="<%= hero.image %>" alt="">
+  <img  class="my-5 mx-auto" src="<%= hero.image %>" alt="">
 
-  <p class="caption"> <%= hero.info %></p>
+  <div class="container text-center mx-auto mb-5 px-5">
+    <h3 class="hero-info mb-5 mx-auto"> <%= hero.info %></h3>
+  </div>
 
-  <a class="btn btn-success" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
+<div class="berry container m-auto">
+  <div class="my-5 border border-success p-4 rounded">
+    <p class="h5">Likes These Berries:</p>
 
-  <a class="btn btn-primary" href="/heroes">Back</a>
+      <% hero.berries.forEach(function(berry){ %>
+        <div class="container">
+          <img src="<%= berry.image %>" alt="">
+          <p><%= berry.name %></p>
+        </div>
+      <% }); %>
+  </div>
+</div>
+
+
+  <a class="btn btn-success btn-lg mx-3 mb-5" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
+
+  <a class="btn btn-primary btn-lg mx-3 mb-5" href="/heroes">Go Back</a>
 </div>
 
 
