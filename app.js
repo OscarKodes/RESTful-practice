@@ -59,6 +59,28 @@ app.post("/heroes", function(req, res){
   });
 });
 
+// Create review
+app.post("/heroes/:id/review", function(req, res){
+
+  Hero.findById(req.params.id, function(err, foundHero){
+    if (err) {
+      console.log("THERE WAS AN ERROR:", err);
+      res.redirect("*");
+    } else {
+      foundHero.reviews.push(req.body.review);
+      foundHero.save(function(err){
+        if (err) {
+          console.log("THERE WAS AN ERROR:", err);
+          res.redirect("*");
+        } else {
+          console.log(foundHero);
+          res.redirect("/heroes/" + req.params.id);
+        }
+      });
+    }
+  });
+});
+
 // SHOW
 app.get("/heroes/:id", function(req, res){
 

@@ -2,6 +2,22 @@ body {
   text-align: center;
 }
 
+.review-display {
+  width: 75%;
+  min-width: 750px;
+  max-width: 1000px;
+}
+
+.review-comment {
+  font-size: 1.5rem;
+}
+
+.review-form {
+  width: 50%;
+  min-width: 500px;
+  max-width: 750px;
+}
+
 .main.container {
   padding: 2rem;
 }

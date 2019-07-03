@@ -15,6 +15,39 @@
 </div>
 
 
+<div class="card review-display mt-5 mx-auto">
+  <h4 class="card-header display-4">Reviews</h4>
+  <ul class="list-group">
+    <% hero.reviews.forEach(function(review) { %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-4">
+            <h4><strong><%= review.author %></strong></h4>
+            <p><em><%= review.date.toDateString() %></em></p>
+          </div>
+          <div class="col-8">
+            <p class="review-comment"><%= review.comment %></p>
+          </div>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+
+<div class="card review-form mx-auto my-5">
+  <h4 class="card-header">Leave a Review</h4>
+  <form class="container" action="/heroes/<%= hero._id %>/review" method="post">
+    <div class="form-group my-3">
+      <input class="form-control form-control-lg" type="text" name="review[comment]" value="" placeholder="Comment" required>
+    </div>
+    <div class="form-group my-3">
+      <input class="form-control form-control-lg" type="text" name="review[author]" value="" placeholder="Author" required>
+    </div>
+    <button class="btn btn-lg btn-primary mb-3" type="submit" name="button">Submit Review</button>
+  </form>
+</div>
+
 
 
 

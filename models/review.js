@@ -6,4 +6,4 @@ const reviewSchema = new mongoose.Schema ({
   date: {type: Date, default: Date.now}
 });
 
-module.exports = [reviewSchema];
+module.exports = reviewSchema;
