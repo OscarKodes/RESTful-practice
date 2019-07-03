@@ -8,6 +8,7 @@ ejs             = require("ejs"),
 app             = express(),
 Hero = require("./models/hero");
 
+
 // Tells express to use ejs files in the views folder
 app.set('view engine', 'ejs');
 
