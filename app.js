@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 
 // Mongoose =========================================
-mongoose.connect("mongodb://localhost:27017/rest-practice", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/rest-practice", {useNewUrlParser: true, useFindAndModify: false});
 
 const heroSchema = new mongoose.Schema ({
   name: String,
