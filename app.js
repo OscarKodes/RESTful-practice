@@ -1,21 +1,25 @@
 // SETUP =========================================
 
-const express   = require("express"),
-app             = express(),
-methodOverride  = require("method-override"),
-bodyParser      = require("body-parser"),
-mongoose        = require("mongoose"),
-ejs             = require("ejs"),
-passport        = require("passport"),
-LocalStrategy   = require("passport-local"),
-Hero            = require("./models/hero"),
-Berry           = require("./models/berry"),
-User            = require("./models/user"),
-seedDB          = require("./seeds");
+const express     = require("express"),
+  app             = express(),
+  methodOverride  = require("method-override"),
+  bodyParser      = require("body-parser"),
+  mongoose        = require("mongoose"),
+  ejs             = require("ejs"),
+  passport        = require("passport"),
+  LocalStrategy   = require("passport-local"),
+  Hero            = require("./models/hero"),
+  Berry           = require("./models/berry"),
+  User            = require("./models/user"),
+  Review          = require("./models/review"),
+  seedDB          = require("./seeds");
 
 
 // connect to mongodb
-mongoose.connect("mongodb://localhost:27017/rest-practice", {useNewUrlParser: true, useFindAndModify: false});
+mongoose.connect("mongodb://localhost:27017/rest-practice", {
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
 
 // Tells express to use ejs files in the views folder
 app.set('view engine', 'ejs');
@@ -24,7 +28,9 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 // Tells express to use bodyParser
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // Tells express to use methodOverride
 app.use(methodOverride("_method"));
@@ -49,98 +55,160 @@ passport.deserializeUser(User.deserializeUser());
 
 
 // declaring middleware function for all routes
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
 
 
 // ROUTES =========================================
-app.get("/", function(req, res){
+app.get("/", function(req, res) {
   res.redirect("/heroes");
 });
 
 // INDEX
-app.get("/heroes", function(req, res){
-  Hero.find({}, function(err, foundHeroes){
-    res.render("index", {heroes: foundHeroes});
+app.get("/heroes", function(req, res) {
+  Hero.find({}, function(err, foundHeroes) {
+    res.render("index", {
+      heroes: foundHeroes
+    });
   })
 });
 
 // NEW
-app.get("/heroes/new", isLoggedIn, function(req, res){
-  Berry.find({}, function(err, allBerries){
-    res.render("heroes/new", {berries: allBerries});
+app.get("/heroes/new", isLoggedIn, function(req, res) {
+  Berry.find({}, function(err, allBerries) {
+    res.render("heroes/new", {
+      berries: allBerries
+    });
   });
 });
 
 // CREATE
-app.post("/heroes", isLoggedIn, function(req, res){
+app.post("/heroes", isLoggedIn, function(req, res) {
 
-  Hero.create(req.body.hero, function(err, newHero){
+  Hero.create(req.body.hero, function(err, newHero) {
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
     } else {
-        res.redirect("/heroes/" + newHero.id);
+      newHero.author.id = req.user._id;
+      newHero.author.username = req.user.username;
+      newHero.save();
+      res.redirect("/heroes/" + newHero.id);
     }
   });
 });
 
 // Create review
-app.post("/heroes/:id/review", isLoggedIn, function(req, res){
+app.post("/heroes/:id/review", isLoggedIn, function(req, res) {
 
-  Hero.findById(req.params.id, function(err, foundHero){
+  let submittedReview = new Review ({
+    comment: req.body.comment,
+    author: req.user
+  });
+
+  Review.create(submittedReview, function(err, newReview){
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
     } else {
-      foundHero.reviews.push(req.body.review);
-      foundHero.save(function(err){
+      Hero.findById(req.params.id, function(err, foundHero){
         if (err) {
           console.log("THERE WAS AN ERROR:", err);
           res.redirect("*");
         } else {
-          console.log(foundHero);
+          foundHero.reviews.push(newReview);
+          foundHero.save();
           res.redirect("/heroes/" + req.params.id);
         }
       });
     }
   });
+
+  // console.log(req.body);
+
+  // find the hero useing req.params.
+  // grab the review with req.body.comment
+  // grab the username and id with req.user
+  // create the review
+  // push the review into the hero's reviews
+  // save the hero
+  // res.redirect to heros/:id
+
+
+  // Hero.findById(req.params.id, function(err, foundHero) {
+  //
+  //     if (err) {
+  //       console.log("THERE WAS AN ERROR:", err);
+  //       res.redirect("*");
+  //     } else {
+  //       Review.create(req.body.review, function(err, newReview) {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           newReview.author = {
+  //             id: req.user._id,
+  //             username: req.user.username
+  //           }
+  //           newReview.save();
+  //
+  //           foundHero.reviews.push(newReview);
+  //           foundHero.save(function(err) {
+  //             if (err) {
+  //               console.log("THERE WAS AN ERROR:", err);
+  //               res.redirect("*");
+  //             } else {
+  //               console.log(foundHero);
+  //               res.redirect("/heroes/" + req.params.id);
+  //             }
+  //           });
+  //         }
+  //       });
+  //     };
+  // });
 });
 
 // SHOW
-app.get("/heroes/:id", function(req, res){
+app.get("/heroes/:id", function(req, res) {
 
-  Hero.findById(req.params.id).populate("berries").exec(function(err, foundHero){
+  Hero.findById(req.params.id).
+  populate("berries").
+  populate("reviews").
+  exec(function(err, foundHero) {
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
     } else {
-      res.render("heroes/show", {hero: foundHero});
+      res.render("heroes/show", {
+        hero: foundHero
+      });
     }
   });
 });
 
 // EDIT
-app.get("/heroes/:id/edit", isLoggedIn, function(req, res){
+app.get("/heroes/:id/edit", isLoggedIn, function(req, res) {
 
-  Hero.findById(req.params.id, function(err, foundHero){
+  Hero.findById(req.params.id, function(err, foundHero) {
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("error");
     } else {
-      Berry.find({}, function(err, allBerries){
-        res.render("heroes/edit", {hero: foundHero, berries: allBerries});
+      Berry.find({}, function(err, allBerries) {
+        res.render("heroes/edit", {
+          hero: foundHero,
+          berries: allBerries
+        });
       });
     }
   });
 });
 
 // UPDATE
-app.put("/heroes/:id", isLoggedIn, function(req, res){
+app.put("/heroes/:id", isLoggedIn, function(req, res) {
 
-  Hero.findByIdAndUpdate(req.params.id, req.body.hero, function(err, foundHero){
+  Hero.findByIdAndUpdate(req.params.id, req.body.hero, function(err, foundHero) {
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
@@ -151,9 +219,9 @@ app.put("/heroes/:id", isLoggedIn, function(req, res){
 });
 
 // DESTROY
-app.delete("/heroes/:id", isLoggedIn, function(req, res){
+app.delete("/heroes/:id", isLoggedIn, function(req, res) {
 
-  Hero.findByIdAndDelete(req.params.id, function(err){
+  Hero.findByIdAndDelete(req.params.id, function(err) {
     if (err) {
       console.log("THERE WAS AN ERROR:", err);
       res.redirect("*");
@@ -168,54 +236,52 @@ app.delete("/heroes/:id", isLoggedIn, function(req, res){
 // ========================================
 
 // show register form
-app.get("/register", function(req, res){
+app.get("/register", function(req, res) {
   res.render("register")
 });
 
 // handle registration
-app.post("/register", function(req, res){
+app.post("/register", function(req, res) {
   let newUser = new User({
     username: req.body.username,
   });
 
-  User.register(newUser, req.body.password, function(err, user){
-    if (err){
+  User.register(newUser, req.body.password, function(err, user) {
+    if (err) {
       console.log(err);
       return res.render("register");
     }
 
-    passport.authenticate("local")(req, res, function(){
+    passport.authenticate("local")(req, res, function() {
       res.redirect("/heroes");
     });
   });
 });
 
 // show login form
-app.get("/login", function(req, res){
+app.get("/login", function(req, res) {
   res.render("login");
 });
 
 // handle login
-app.post("/login", passport.authenticate("local",
-  {
-    successRedirect: "/heroes",
-    failureRedirect: "/login"
-  }), function(req, res){
-});
+app.post("/login", passport.authenticate("local", {
+  successRedirect: "/heroes",
+  failureRedirect: "/login"
+}), function(req, res) {});
 
 // logout route
-app.get("/logout", function(req, res){
+app.get("/logout", function(req, res) {
   req.logout();
   res.redirect("/heroes");
 });
 
 // ERROR
-app.get("*", function(req, res){
+app.get("*", function(req, res) {
   res.render("error");
 });
 
 // middleware function
-function isLoggedIn(req, res, next){
+function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
@@ -226,6 +292,6 @@ function isLoggedIn(req, res, next){
 
 
 
-app.listen(3000, function(){
+app.listen(3000, function() {
   console.log("Server is running on port 3000.");
 });

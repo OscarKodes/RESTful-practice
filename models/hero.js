@@ -1,12 +1,24 @@
 const mongoose = require("mongoose");
-const reviewSchema = require("./review");
+const Review = require("./review");
 
 const heroSchema = new mongoose.Schema ({
   name: String,
+  author: {
+    id: {
+          type: mongoose.Schema.Types.Object,
+          ref: "User"
+        },
+    username: String
+    },
   date: { type: Date, default: Date.now},
   image: String,
   info: String,
-  reviews: [reviewSchema],
+  reviews: [
+     {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review"
+     }
+  ],
   berries: [
      {
         type: mongoose.Schema.Types.ObjectId,

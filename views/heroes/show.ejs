@@ -3,6 +3,15 @@
 <div class="hero-show-box fluid-container my-5 mx-auto border border-success p-4 rounded">
   <h1 class="display-1 my-5"><%= hero.name %></h1>
 
+  <p class="mb-4">
+    <% if (hero.author.username) { %>
+      <em>Submitted By <%= hero.author.username %> </em>
+    <% } else { %>
+      <em>Sample Hero</em>
+    <% } %>
+  </p>
+
+
   <p><%= hero.date.toDateString() %></p>
 
   <img  class="my-5 mx-auto" src="<%= hero.image %>" alt="">
@@ -24,45 +33,63 @@
   </div>
 </div>
 
-
+<% if (currentUser) { %>
   <a class="btn btn-success btn-lg mx-3 mb-5" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
+<% } %>
 
   <a class="btn btn-primary btn-lg mx-3 mb-5" href="/heroes">Go Back</a>
 </div>
 
 
-<div class="card review-display mt-5 mx-auto">
+<div class="card review-display my-5 mx-auto">
   <h4 class="card-header display-4">Reviews</h4>
-  <ul class="list-group">
-    <% hero.reviews.forEach(function(review) { %>
+  <% if (hero.reviews.length === 0) { %>
+    <ul class="list-group">
       <li class="list-group-item">
-        <div class="row">
-          <div class="col-4">
-            <h4><strong><%= review.author %></strong></h4>
-            <p><em><%= review.date.toDateString() %></em></p>
-          </div>
-          <div class="col-8">
-            <p class="review-comment"><%= review.comment %></p>
-          </div>
-        </div>
+        There are currently no reviews for this hero.
       </li>
-    <% }); %>
-  </ul>
+    </ul>
+  <% } else { %>
+    <ul class="list-group">
+      <% hero.reviews.forEach(function(review) { %>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-4">
+              <h4><strong><%= review.author.username %></strong></h4>
+              <p><em><%= review.date.toDateString() %></em></p>
+            </div>
+            <div class="col-8">
+              <p class="review-comment"><%= review.comment %></p>
+            </div>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+
 </div>
 
+<% if (currentUser) { %>
+  <div class="card review-form mx-auto my-5">
+    <h4 class="card-header">Leave a Review as <em><%= currentUser.username %></em></h4>
+    <form class="container" action="/heroes/<%= hero._id %>/review" method="post">
+      <div class="form-group my-3">
+        <input class="form-control form-control-lg" type="text" name="comment" value="" placeholder="Comment" required>
+      </div>
+      <button class="btn btn-lg btn-primary mb-3" type="submit" name="button">Submit Review</button>
+    </form>
+  </div>
+<% } else { %>
+  <div class="container my-5">
+    <p>
+      <a href="/login">Login </a>
+       or
+      <a href="/register"> Register </a>
+       to submit a review!
+    </p>
+  </div>
+<% } %>
 
-<div class="card review-form mx-auto my-5">
-  <h4 class="card-header">Leave a Review</h4>
-  <form class="container" action="/heroes/<%= hero._id %>/review" method="post">
-    <div class="form-group my-3">
-      <input class="form-control form-control-lg" type="text" name="review[comment]" value="" placeholder="Comment" required>
-    </div>
-    <div class="form-group my-3">
-      <input class="form-control form-control-lg" type="text" name="review[author]" value="" placeholder="Author" required>
-    </div>
-    <button class="btn btn-lg btn-primary mb-3" type="submit" name="button">Submit Review</button>
-  </form>
-</div>
 
 
 

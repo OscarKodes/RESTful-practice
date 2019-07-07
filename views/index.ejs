@@ -3,7 +3,19 @@
 <div class="container my-5 text-center">
   <h1 class="display-2 font-weight-bold my-5">Welcome!</h1>
 
-  <a class="btn btn-lg btn-outline-primary" href="/heroes/new">Submit a Hero</a>
+  <% if (currentUser) { %>
+    <a class="btn btn-lg btn-outline-primary" href="/heroes/new">Submit a Hero</a>
+
+  <% } else { %>
+    <div class="container my-5">
+      <p>
+        <a class="btn btn-outline-primary py-0" href="/login">Login </a>
+         or
+        <a class="btn btn-outline-success  py-0" href="/register"> Register </a>
+         to submit a Hero!
+      </p>
+    </div>
+  <% } %>
 </div>
 
 <div class="main container">

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Review = require("./models/review");
 const Hero = require("./models/hero");
 const Berry = require("./models/berry");
 
@@ -62,21 +61,10 @@ function seedDB() {
             console.log(err);
           } else {
             console.log("Added hero:", newHero.name);
-
-            // This is for embedding
-            newHero.reviews.push({
-              author: "All Might!",
-              comment: "PLUS ULTRA!"
-            });
-            newHero.reviews.push({
-              author: "Eraser Head",
-              comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Penatibus et magnis dis parturient montes nascetur ridiculus."
-            });
             newHero.save(function(err) {
               if (err) {
                 console.log(err);
               } else {
-                console.log("Sample comments added.");
                 if (i === 3) {
                   berrySetUp();
                 };
