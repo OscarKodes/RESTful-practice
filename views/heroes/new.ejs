@@ -1,4 +1,4 @@
-<%- include partials/header %>
+<%- include ../partials/header %>
 
 <h1 class="display-3 my-5">Submit a New Hero</h1>
 
@@ -22,7 +22,7 @@
           </strong>
           <img src="<%= berry.image %>" alt="">
         </p>
-        <input type="checkbox" name="hero[berries]" value="<%= berry._id %>" checked="">
+        <input type="checkbox" name="hero[berries]" value="<%= berry._id %>">
       </div>
 
       <% }); %>
@@ -35,4 +35,4 @@
 
 
 
-<%- include partials/footer %>
+<%- include ../partials/footer %>
