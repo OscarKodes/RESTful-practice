@@ -1,0 +1,25 @@
+<%- include ../partials/header %>
+
+<div class="container">
+  <h1 class="display-3">
+    Edit <%= hero.name %> Review
+  </h1>
+</div>
+
+
+<div class="card review-form mx-auto my-5">
+  <h4 class="card-header">Edit Review as <em><%= currentUser.username %></em></h4>
+  <form class="container" action="/heroes/<%= hero._id %>/review/<%= review._id %>?_method=PUT" method="post">
+    <div class="form-group my-3">
+      <input class="form-control form-control-lg" type="text" name="review[comment]" value="<%= review.comment %>" required>
+    </div>
+    <button class="btn btn-lg btn-primary mb-3" type="submit" name="button">Submit Review</button>
+  </form>
+</div>
+
+
+
+
+
+
+<%- include ../partials/footer %>

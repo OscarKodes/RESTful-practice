@@ -15,8 +15,9 @@ const express     = require("express"),
   seedDB          = require("./seeds");
 
 // REQUIRE EXTERNAL ROUTE FILES ===================
-const heroRoutes  = require("./routes/heroes.js"),
-      indexRoutes = require("./routes/index.js");
+const heroRoutes    = require("./routes/heroes.js"),
+      reviewRoutes  = require("./routes/review.js"),
+      indexRoutes   = require("./routes/index.js");
 
 // connect to mongodb
 mongoose.connect("mongodb://localhost:27017/rest-practice", {
@@ -65,6 +66,7 @@ app.use(function(req, res, next) {
 
 // tells app to use these routes and include the prefixes
 app.use("/heroes", heroRoutes);
+app.use("/heroes/:id/review", reviewRoutes);
 app.use(indexRoutes);
 
 

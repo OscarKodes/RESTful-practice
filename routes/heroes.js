@@ -39,33 +39,6 @@ router.post("/", isLoggedIn, function(req, res) {
   });
 });
 
-// Create review
-router.post("/:id/review", isLoggedIn, function(req, res) {
-
-  let submittedReview = new Review ({
-    comment: req.body.comment,
-    author: req.user
-  });
-
-  Review.create(submittedReview, function(err, newReview){
-    if (err) {
-      console.log("THERE WAS AN ERROR:", err);
-      res.redirect("/404");
-    } else {
-      Hero.findById(req.params.id, function(err, foundHero){
-        if (err) {
-          console.log("THERE WAS AN ERROR:", err);
-          res.redirect("/404");
-        } else {
-          foundHero.reviews.push(newReview);
-          foundHero.save();
-          res.redirect("/heroes/" + req.params.id);
-        }
-      });
-    }
-  });
-});
-
 // SHOW
 router.get("/:id", function(req, res) {
 
