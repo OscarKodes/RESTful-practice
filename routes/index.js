@@ -1,7 +1,8 @@
 const express     = require("express"),
   router          = express.Router(),
   passport        = require("passport"),
-  User            = require("../models/user");
+  User            = require("../models/user"),
+  middleware      = require("../middleware");
 
 
 // ROUTES =========================================
@@ -44,7 +45,7 @@ router.post("/login", passport.authenticate("local", {
 }), function(req, res) {});
 
 // logout route
-router.get("/logout", function(req, res) {
+router.get("/logout", middleware.isLoggedIn, function(req, res) {
   req.logout();
   res.redirect("/heroes");
 });
@@ -58,13 +59,6 @@ router.get("*", function(req, res) {
   res.redirect("/404");
 });
 
-// middleware function
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
 
-  res.redirect("/login");
-}
 
 module.exports = router;
