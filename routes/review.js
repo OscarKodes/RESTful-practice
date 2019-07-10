@@ -69,6 +69,16 @@ router.put("/:review_id", function(req, res){
 });
 
 // Destroy Route
+router.delete("/:review_id", function(req, res){
+  Review.findByIdAndDelete(req.params.review_id, function(err){
+    if (err) {
+      console.log("THERE WAS AN ERROR:", err);
+      res.redirect("/404");
+    } else {
+      res.redirect("/heroes/" + req.params.id);
+    }
+  });
+});
 
 
 
