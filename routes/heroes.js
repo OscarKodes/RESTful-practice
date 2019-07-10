@@ -58,7 +58,7 @@ router.get("/:id", function(req, res) {
 });
 
 // EDIT
-router.get("/:id/edit", isLoggedIn, function(req, res) {
+router.get("/:id/edit", checkHeroOwnership, function(req, res) {
 
   Hero.findById(req.params.id, function(err, foundHero) {
     if (err) {
@@ -76,7 +76,7 @@ router.get("/:id/edit", isLoggedIn, function(req, res) {
 });
 
 // UPDATE
-router.put("/:id", isLoggedIn, function(req, res) {
+router.put("/:id", checkHeroOwnership, function(req, res) {
 
   Hero.findByIdAndUpdate(req.params.id, req.body.hero, function(err, foundHero) {
     if (err) {
@@ -89,7 +89,7 @@ router.put("/:id", isLoggedIn, function(req, res) {
 });
 
 // DESTROY
-router.delete("/:id", isLoggedIn, function(req, res) {
+router.delete("/:id", checkHeroOwnership, function(req, res) {
 
   Hero.findByIdAndDelete(req.params.id, function(err) {
     if (err) {
@@ -109,5 +109,32 @@ function isLoggedIn(req, res, next) {
 
   res.redirect("/login");
 }
+
+function checkHeroOwnership(req, res, next) {
+  // check if user logged in
+  if (req.isAuthenticated()) {
+    // search for hero to modify with id
+    Hero.findById(req.params.id, function(err, foundHero){
+      if (err) {
+        res.redirect("/404");
+      } else {
+        // check if user owns this hero object
+        console.log(foundHero);
+        if (foundHero.author.id && foundHero.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          // put flash message telling them not allowed
+          res.redirect("back");
+        }
+      }
+    });
+  } else {
+    res.redirect("/login");
+  }
+}
+
+
+
+
 
 module.exports = router;

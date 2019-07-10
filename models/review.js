@@ -4,11 +4,11 @@ const reviewSchema = new mongoose.Schema ({
   comment: String,
   author: {
     id: {
-      type: mongoose.Schema.Types.Object,
-      ref: "User"
-    },
+          type: mongoose.Schema.Types.Object,
+          ref: "User"
+        },
     username: String
-  },
+    },
   date: {type: Date, default: Date.now}
 });
 

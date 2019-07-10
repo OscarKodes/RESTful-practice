@@ -33,9 +33,10 @@
   </div>
 </div>
 
-<% if (currentUser) { %>
-  <a class="btn btn-success btn-lg mx-3 mb-5" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
+<% if (hero.author.id && currentUser && hero.author.id.equals(currentUser._id)) { %>
+  <a class="btn btn-outline-warning btn-lg mx-3 mb-5" href="/heroes/<%= hero._id %>/edit">Edit Hero</a>
 <% } %>
+
 
   <a class="btn btn-primary btn-lg mx-3 mb-5" href="/heroes">Go Back</a>
 </div>
@@ -60,7 +61,15 @@
             </div>
             <div class="col-8">
               <p class="review-comment"><%= review.comment %></p>
-              <a class="btn btn-outline-warning btn-sm" href="/heroes/<%= hero._id %>/review/<%= review._id %>/edit">Edit Review</a>
+
+              <% if (review.author.id.equals(currentUser._id)){ %>
+                <a class="btn btn-outline-warning btn-sm"
+                  href="/heroes/<%= hero._id %>/review/<%= review._id %>/edit">
+                  Edit Review
+                </a>
+              <% } %>
+
+
             </div>
           </div>
         </li>
