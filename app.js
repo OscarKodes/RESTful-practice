@@ -12,7 +12,8 @@ const express     = require("express"),
   Berry           = require("./models/berry"),
   User            = require("./models/user"),
   Review          = require("./models/review"),
-  seedDB          = require("./seeds");
+  seedDB          = require("./seeds"),
+  flash           = require("connect-flash");
 
 // REQUIRE EXTERNAL ROUTE FILES ===================
 const heroRoutes    = require("./routes/heroes.js"),
@@ -39,6 +40,8 @@ app.use(bodyParser.urlencoded({
 // Tells express to use methodOverride
 app.use(methodOverride("_method"));
 
+app.use(flash());
+
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
   secret: "One Two Buckle My Shoe Pikachu",
@@ -52,6 +55,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 // UNCOMMENT THE SEEDDB LINE BELOW !!
 // TO REMOVE ALL HERO OBJECTS !!
 // AND RESET SAMPLE FILES !!
@@ -60,6 +64,9 @@ passport.deserializeUser(User.deserializeUser());
 // declaring middleware function for all routes
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.warning = req.flash("warning");
   next();
 });
 

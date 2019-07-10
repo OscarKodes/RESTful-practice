@@ -20,16 +20,17 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 
   Review.create(submittedReview, function(err, newReview){
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
       Hero.findById(req.params.id, function(err, foundHero){
         if (err) {
-          console.log("THERE WAS AN ERROR:", err);
+          req.flash("error", err.message);
           res.redirect("/404");
         } else {
           foundHero.reviews.push(newReview);
           foundHero.save();
+          req.flash("success", "Comment submitted!");
           res.redirect("/heroes/" + req.params.id);
         }
       });
@@ -44,12 +45,12 @@ router.get("/:review_id/edit", middleware.checkReviewOwnership, function(req, re
 
   Hero.findById(req.params.id, function(err, foundHero){
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
       Review.findById(req.params.review_id, function(err, foundReview){
         if (err) {
-          console.log("THERE WAS AN ERROR:", err);
+          req.flash("error", err.message);
           res.redirect("/404");
         } else {
           res.render("reviews/edit", {hero: foundHero, review: foundReview});
@@ -64,9 +65,10 @@ router.put("/:review_id", middleware.checkReviewOwnership, function(req, res){
 
   Review.findByIdAndUpdate(req.params.review_id, req.body.review, function(err, foundReview){
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
+      req.flash("success", "Comment updated.");
       res.redirect("/heroes/" + req.params.id);
     }
   });
@@ -76,9 +78,10 @@ router.put("/:review_id", middleware.checkReviewOwnership, function(req, res){
 router.delete("/:review_id", middleware.checkReviewOwnership, function(req, res){
   Review.findByIdAndDelete(req.params.review_id, function(err){
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
+      req.flash("success", "Comment deleted.");
       res.redirect("/heroes/" + req.params.id);
     }
   });

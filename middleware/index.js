@@ -10,6 +10,7 @@ middlewareObj.isLoggedIn = function (req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash("error", "You need to be logged in to do that.");
   res.redirect("/login");
 }
 
@@ -25,11 +26,13 @@ middlewareObj.checkReviewOwnership = function (req, res, next) {
           next();
         } else {
           // flash message telling user not allowed
+          req.flash("error", "You are not authorized to do that.");
           res.redirect("back");
         }
       }
     });
   } else {
+    req.flash("error", "You need to be logged in to do that.");
     res.redirect("/login");
   }
 }
@@ -48,10 +51,12 @@ middlewareObj.checkHeroOwnership = function (req, res, next) {
         } else {
           // put flash message telling them not allowed
           res.redirect("back");
+          req.flash("error", "You are not authorized to do that.");
         }
       }
     });
   } else {
+    req.flash("error", "You need to be logged in to do that.");
     res.redirect("/login");
   }
 }

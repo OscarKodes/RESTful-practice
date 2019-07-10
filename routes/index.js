@@ -23,11 +23,12 @@ router.post("/register", function(req, res) {
 
   User.register(newUser, req.body.password, function(err, user) {
     if (err) {
-      console.log(err);
-      return res.render("register");
+      req.flash("warning", err.message);
+      return res.redirect("/register");
     }
 
     passport.authenticate("local")(req, res, function() {
+      req.flash("success", "Welcome to the Hero Database, " + newUser.username + "!");
       res.redirect("/heroes");
     });
   });
@@ -41,12 +42,15 @@ router.get("/login", function(req, res) {
 // handle login
 router.post("/login", passport.authenticate("local", {
   successRedirect: "/heroes",
-  failureRedirect: "/login"
+  successFlash: "Successfully Logged In!",
+  failureRedirect: "/login",
+  failureFlash: true
 }), function(req, res) {});
 
 // logout route
 router.get("/logout", middleware.isLoggedIn, function(req, res) {
   req.logout();
+  req.flash("success", "You have been logged out.");
   res.redirect("/heroes");
 });
 

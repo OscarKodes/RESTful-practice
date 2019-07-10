@@ -42,8 +42,12 @@
 
 <a class="btn btn-dark btn-lg mb-5" href="/heroes/<%= hero._id %>">Back</a>
 
-<form class="" action="/heroes/<%= hero._id %>?_method=DELETE" method="post">
-  <button type="submit" class="btn btn-danger">Delete</button>
+<div class="container">
+  <button type="submit" class="delete-button btn btn-outline-danger btn-sm">Delete</button>
+</div>
+
+<form class="d-none" action="/heroes/<%= hero._id %>?_method=DELETE" method="post">
+  <button type="submit" class="delete-confirmed"></button>
 </form>
 
 

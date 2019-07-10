@@ -6,27 +6,24 @@
   </h1>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5 mx-auto">
   <div class="card review-form mx-auto">
     <h4 class="card-header">Edit Review as <em><%= currentUser.username %></em></h4>
     <form class="container" action="/heroes/<%= hero._id %>/review/<%= review._id %>?_method=PUT" method="post">
       <div class="form-group my-3">
         <input class="form-control form-control-lg" type="text" name="review[comment]" value="<%= review.comment %>" required>
       </div>
-      <button class="btn btn-lg btn-primary mb-3 float-left" type="submit" name="button">Submit Review</button>
-      <form class="" action="/heroes/<%= hero._id %>/review/<%= review._id %>?_method=DELETE" method="post">
-        <button class="btn btn-outline-danger btn-sm float-right mt-3" type="submit" name="button">Delete Review</button>
-      </form>
+      <button class="btn btn-lg btn-primary mb-3" type="submit" name="button">Submit Review</button>
     </form>
-
   </div>
+
+  <button class="delete-button btn btn-outline-danger btn-sm py-0 mt-2 text-right" type="submit" name="button">Delete Review</button>
 
 </div>
 
 
-
-
-
-
+<form class="d-none" action="/heroes/<%= hero._id %>/review/<%= review._id %>?_method=DELETE" method="post">
+  <button class="delete-confirmed" type="submit" name="button"></button>
+</form>
 
 <%- include ../partials/footer %>

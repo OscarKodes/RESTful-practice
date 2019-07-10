@@ -29,12 +29,13 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 
   Hero.create(req.body.hero, function(err, newHero) {
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
       newHero.author.id = req.user._id;
       newHero.author.username = req.user.username;
       newHero.save();
+      req.flash("success", "New Hero created!");
       res.redirect("/heroes/" + newHero.id);
     }
   });
@@ -48,7 +49,7 @@ router.get("/:id", function(req, res) {
   populate("reviews").
   exec(function(err, foundHero) {
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
       res.render("heroes/show", {
@@ -63,7 +64,7 @@ router.get("/:id/edit", middleware.checkHeroOwnership, function(req, res) {
 
   Hero.findById(req.params.id, function(err, foundHero) {
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("error");
     } else {
       Berry.find({}, function(err, allBerries) {
@@ -81,9 +82,10 @@ router.put("/:id", middleware.checkHeroOwnership, function(req, res) {
 
   Hero.findByIdAndUpdate(req.params.id, req.body.hero, function(err, foundHero) {
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
+      req.flash("success", "Hero updated.");
       res.redirect("/heroes/" + req.params.id);
     }
   });
@@ -94,9 +96,10 @@ router.delete("/:id", middleware.checkHeroOwnership, function(req, res) {
 
   Hero.findByIdAndDelete(req.params.id, function(err) {
     if (err) {
-      console.log("THERE WAS AN ERROR:", err);
+      req.flash("error", err.message);
       res.redirect("/404");
     } else {
+      req.flash("success", "Hero deleted.");
       res.redirect("/heroes");
     }
   });
