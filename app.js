@@ -61,7 +61,7 @@ passport.deserializeUser(User.deserializeUser());
 // UNCOMMENT THE SEEDDB LINE BELOW !!
 // TO REMOVE ALL HERO OBJECTS !!
 // AND RESET SAMPLE FILES !!
-seedDB();
+// seedDB();
 
 // declaring middleware function for all routes
 app.use(function(req, res, next) {
