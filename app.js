@@ -21,7 +21,9 @@ const heroRoutes    = require("./routes/heroes.js"),
       indexRoutes   = require("./routes/index.js");
 
 // connect to mongodb
-mongoose.connect("mongodb://localhost:27017/rest-practice", {
+const DATABASEURL = process.env.DATABASEURL || "mongodb://localhost:27017/rest-practice";
+
+mongoose.connect( DATABASEURL, {
   useNewUrlParser: true,
   useFindAndModify: false
 });
@@ -76,7 +78,8 @@ app.use("/heroes", heroRoutes);
 app.use("/heroes/:id/review", reviewRoutes);
 app.use(indexRoutes);
 
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000, function() {
+app.listen(PORT, function() {
   console.log("Server is running on port 3000.");
 });
